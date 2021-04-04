@@ -2,6 +2,7 @@
 AddEventHandler("iblock", "OnBeforeIBlockElementUpdate", Array("EX2", "EX2_50"));
 AddEventHandler("main", "OnEpilog", Array("EX2", "EX2_93"));
 AddEventHandler("main", "OnBeforeEventAdd", array("EX2", "EX2_51"));
+AddEventHandler("main", "OnBuildGlobalMenu", Array("EX2", "EX2_95"));
 
 IncludeModuleLangFile(__FILE__);
 
@@ -87,6 +88,49 @@ class EX2
                     "DESCRIPTION" => GetMessage("REPLACEMENT", ["AUTHOR" => $arFields["AUTHOR"]]),
                 ]
             );
+        }
+    }
+    function EX2_95(&$aGlobalMenu, &$aModuleMenu)
+    {
+        global $USER;
+        $userGroups = CUser::GetUserGroupList($USER->GetID());
+        $contentManagerGroupID = CGroup::GetList(
+          $by = "c_sort",
+          $order = "asc",
+            [
+                "STRING_ID" => "content_editor"
+            ]
+        )->Fetch()["ID"];
+
+        while ($group = $userGroups->Fetch())
+        {
+            if ($group["GROUP_ID"] == 1)
+            {
+                $isAdmin = true;
+            }
+            if ($group["GROUP_ID"] == $contentManagerGroupID)
+            {
+                $isContentManager = true;
+            }
+        }
+        if (!$isAdmin && $isContentManager)
+        {
+            foreach ($aModuleMenu as $key => $item)
+            {
+                if ($item["items_id"] == "menu_iblock_/news")
+                {
+                    $aModuleMenu = [$item];
+                    foreach ($item["items"] as $childItem)
+                    {
+                        if ($childItem["items_id"] == "menu_iblock_/news/1")
+                        {
+                            $aModuleMenu[0]["items"] = [$childItem];
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
         }
     }
 }
