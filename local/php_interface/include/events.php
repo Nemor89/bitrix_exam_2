@@ -1,6 +1,8 @@
 <?php
 AddEventHandler("iblock", "OnBeforeIBlockElementUpdate", Array("EX2", "EX2_50"));
 AddEventHandler("main", "OnEpilog", Array("EX2", "EX2_93"));
+AddEventHandler("main", "OnBeforeEventAdd", array("EX2", "EX2_51"));
+
 IncludeModuleLangFile(__FILE__);
 
 class EX2
@@ -48,6 +50,41 @@ class EX2
                     "AUDIT_TYPE_ID" => "ERROR_404",
                     "MODULE_ID" => "main",
                     "DESCRIPTION" => $APPLICATION->GetCurPage()
+                ]
+            );
+        }
+    }
+    function EX2_51(&$event, &$lid, &$arFields)
+    {
+        if ($event == "FEEDBACK_FORM")
+        {
+            global $USER;
+            if ($USER->isAuthorized())
+            {
+                $arFields["AUTHOR"] = GetMessage("AUTH",
+                    [
+                        "#ID#" => $USER->GetID(),
+                        "#LOGIN#" => $USER->GetLogin(),
+                        "#NAME#" => $USER->GetFullName(),
+                        "#FORM_NAME#" => $arFields["AUTHOR"]
+                    ]
+                );
+            }
+            else
+            {
+                $arFields["AUTHOR"] = GetMessage("NOT_AUTH",
+                    [
+                        "#FORM_NAME#" => $arFields["AUTHOR"]
+                    ]
+                );
+            }
+            CEventLog::Add(
+                [
+                    "SEVERITY" => "SECURITY",
+                    "AUDIT_TYPE_ID" => "REPLACEMENT",
+                    "MODULE_ID" => "main",
+                    "ITEM_ID" => $event,
+                    "DESCRIPTION" => GetMessage("REPLACEMENT", ["AUTHOR" => $arFields["AUTHOR"]]),
                 ]
             );
         }
