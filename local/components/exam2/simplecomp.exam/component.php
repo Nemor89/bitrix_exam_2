@@ -30,6 +30,22 @@ if (isset($_REQUEST["F"]))
     $cFilter = true;
 }
 
+global $USER;
+if ($USER->isAuthorized())
+{
+    $arButtons = CIBlock::GetPanelButtons($arParams["PRODUCTS_IBLOCK_ID"]);
+    $this->AddIncludeAreaIcons(
+        [
+            [
+                "ID" => "link_ib",
+                "TITLE" => GetMessage("IB_IN_ADMIN"),
+                "URL" => $arButtons["submenu"]["element_list"]["ACTION_URL"],
+                "IN_PARAMS_MENU" => true
+            ]
+        ]
+    );
+}
+
 if ($this->startResultCache(false, [$cFilter]))
 {
     $arNews = [];
