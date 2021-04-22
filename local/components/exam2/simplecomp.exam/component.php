@@ -124,6 +124,22 @@ if ($this->startResultCache(false, [$cFilter]))
     $arResult["PRODUCT_CNT"] =0;
     while ($arProducts  = $obProducts->Fetch())
     {
+        $arButtons = CIBlock::GetPanelButtons(
+            $arParams["PRODUCTS_IBLOCK_ID"],
+            $arProducts["ID"],
+            0,
+            [
+                "SECTION_BUTTONS" => false,
+                "SESSID" => false,
+            ]
+        );
+
+        $arProducts["EDIT_LINK"] = $arButtons["edit"]["edit_element"]["ACTION_URL"];
+        $arProducts["DELETE_LINK"] = $arButtons["edit"]["delete_element"]["ACTION_URL"];
+
+        $arResult["ADD_LINK"] = $arButtons["edit"]["add_element"]["ACTION_URL"];
+        $arResult["IBLOCK_ID"] = $arParams["PRODUCTS_IBLOCK_ID"];
+
         $arProducts["DETAIL_TEMPLATE_LINK"] = str_replace(
             [
                 "#SECTION_ID#",
