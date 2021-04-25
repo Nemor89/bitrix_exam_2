@@ -62,4 +62,3 @@ function CheckUserCount()
 
     return "CheckUserCount();";
 }
-CheckUserCount();
