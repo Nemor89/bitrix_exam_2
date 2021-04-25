@@ -46,7 +46,9 @@ if ($USER->isAuthorized())
     );
 }
 
-if ($this->startResultCache(false, [$cFilter]))
+$arNavigation = CDBResult::GetNavParams($arNavParams);
+
+if ($this->startResultCache(false, [$cFilter, $arNavigation]))
 {
     $arNews = [];
     $arNewsID = [];
@@ -58,13 +60,19 @@ if ($this->startResultCache(false, [$cFilter]))
 
         ],
         false,
-        false,
+        [
+            "nPageSize" => $arParams["ELEMENT_PER_PAGE"],
+            "bShowAll" => true
+        ],
         [
             "NAME",
             "ACTIVE_FROM",
             "ID"
         ]
     );
+
+    $arResult["NAV_STRING"] = $obNews->GetPageNavString(GetMessage("PAGE_TITLE"));
+
     while ($newsElements = $obNews->Fetch())
     {
         $arNewsID[] = $newsElements["ID"];
@@ -171,7 +179,10 @@ if ($this->startResultCache(false, [$cFilter]))
         $arResult["PRODUCT_CNT"] ++;
         foreach ($arSections[$arProducts["IBLOCK_SECTION_ID"]][$arParams["PRODUCTS_IBLOCK_PROPERTY"]] as $newsID)
         {
-            $arNews[$newsID]["PRODUCTS"][] = $arProducts;
+            if (isset($arNews[$newsID]))
+            {
+                $arNews[$newsID]["PRODUCTS"][] = $arProducts;
+            }
         }
     }
 
@@ -179,7 +190,10 @@ if ($this->startResultCache(false, [$cFilter]))
     {
         foreach ($arSection[$arParams["PRODUCTS_IBLOCK_PROPERTY"]] as $newID)
         {
-            $arNews[$newID]["SECTIONS"][] = $arSection["NAME"];
+            if (isset($arNews[$newID]))
+            {
+                $arNews[$newID]["SECTIONS"][] = $arSection["NAME"];
+            }
         }
     }
     $arResult["NEWS"] = $arNews;

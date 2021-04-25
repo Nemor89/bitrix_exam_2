@@ -39,4 +39,12 @@ echo GetMessage("FILTER_TEMPLATE") . "<a href='" . $URL . "'>" . $URL . "</a>";
         <?endif?>
     <?endforeach;?>
 </ul>
+<br>
+---
+<p>
+    <b>
+        <?=GetMessage("NAVY")?>
+    </b>
+</p>
+<?=$arResult["NAV_STRING"]?>
 <?endif?>

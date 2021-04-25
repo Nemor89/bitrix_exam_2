@@ -4,4 +4,5 @@ $MESS["SIMPLECOMP_EXAM2_CAT_IBLOCK_PROPERTY"] = "Код пользователь
 новостям";
 $MESS["SIMPLECOMP_EXAM2_NEWS_IBLOCK_ID"] = "ID инфоблока с новостями";
 $MESS["SIMPLECOMP_EXAM2_DETAIL_TEMPLATE_LINK"] = "Шаблон ссылки на детальный просмотр";
+$MESS["ELEMENT_PER_PAGE"] = "Количество элементов на странице";
 ?>

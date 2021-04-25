@@ -17,6 +17,12 @@ $arComponentParameters = array(
             "PARENT" => "BASE",
             "TYPE" => "STRING",
         ),
+        "ELEMENT_PER_PAGE" => array(
+            "NAME" => GetMessage("ELEMENT_PER_PAGE"),
+            "PARENT" => "BASE",
+            "TYPE" => "STRING",
+            "DEFAULT" => 2
+        ),
         "DETAIL_TEMPLATE_LINK" => array(
             "NAME" => GetMessage("SIMPLECOMP_EXAM2_DETAIL_TEMPLATE_LINK"),
             "PARENT" => "BASE",
