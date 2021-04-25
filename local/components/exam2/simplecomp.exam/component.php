@@ -46,10 +46,14 @@ if ($USER->isAuthorized())
     );
 }
 
+global $CACHE_MANAGER;
+
 $arNavigation = CDBResult::GetNavParams($arNavParams);
 
-if ($this->startResultCache(false, [$cFilter, $arNavigation]))
+if ($this->startResultCache(false, [$cFilter, $arNavigation], "/servicesIblock"))
 {
+    $CACHE_MANAGER->RegisterTag("iblock_id_3");
+
     $arNews = [];
     $arNewsID = [];
     $obNews = CIBlockElement::GetList(
